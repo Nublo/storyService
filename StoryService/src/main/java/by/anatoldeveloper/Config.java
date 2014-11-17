@@ -6,8 +6,6 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import by.anatoldeveloper.database.QueryLoader;
-
 @Configuration
 public class Config {
 	
@@ -23,10 +21,5 @@ public class Config {
 
         return basicDataSource;
     }
-	
-	@Bean
-	public QueryLoader queryLoader() {
-		return new QueryLoader();
-	}
 
 }

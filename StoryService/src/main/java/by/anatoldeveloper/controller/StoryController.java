@@ -6,18 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import by.anatoldeveloper.database.QueryLoader;
-import by.anatoldeveloper.entity.Story;
+import by.anatoldeveloper.repository.Story;
+import by.anatoldeveloper.repository.StoryRepository;
 
 @RestController
 public class StoryController {
 	
 	@Autowired
-	QueryLoader loader;
+	StoryRepository storyRepository;
 	
 	@RequestMapping("/story/{id}") 
-    public @ResponseBody Story shops(@PathVariable("id") long id) throws Exception {
-    	return loader.getStory(id);
+    public @ResponseBody Story shops(@PathVariable("id") long id) {
+    	return storyRepository.findById(id);
     }
 
 }
