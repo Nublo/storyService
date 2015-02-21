@@ -5,23 +5,29 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import by.anatoldeveloper.story.data.StoryRepository;
 import by.anatoldeveloper.story.model.Story;
 import by.anatoldeveloper.story.network.RetrofitStoryRequest;
 import by.anatoldeveloper.story.persistence.Account;
+import by.anatoldeveloper.story.story.iterator.NextStory;
+import by.anatoldeveloper.story.story.iterator.NextStoryFabric;
 
 /**
  * Created by Anatol on 11.12.2014.
+ * Project Story
  */
 public class StoryFragment extends Fragment {
 
@@ -29,15 +35,18 @@ public class StoryFragment extends Fragment {
 
     private TextView mTvStoryText;
     private ProgressBar mStoryLoading;
-    private Story.StoryList mStories;
     private Account mAccount;
     private int mCurrentStory;
+    private StoryRepository mRepository;
+    private ToggleButton mLikeButton;
+    private Button mStoryContent;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mAccount = new Account();
         mAccount.restore(activity);
+        mRepository = new StoryRepository(activity);
     }
 
     @Override
@@ -56,8 +65,32 @@ public class StoryFragment extends Fragment {
             }
         });
 
-        mStories = new Story.StoryList();
+        mLikeButton = (ToggleButton) rootView.findViewById(R.id.tbn_main_like);
+        mLikeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean favorite = mLikeButton.isChecked();
+                mRepository.updateFavoriteById(favorite, mCurrentStory);
+                Story s = mRepository.getStoryById(mCurrentStory);
+                Log.d("test", "Story after update : " + s.toString());
+            }
+        });
+        mStoryContent = (Button) rootView.findViewById(R.id.btn_story_content);
+        mStoryContent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mStoryContent.getText().equals("All")) {
+                    mStoryContent.setText("18+");
+                } else if (mStoryContent.getText().equals("18+")) {
+                    mStoryContent.setText("18-");
+                } else if (mStoryContent.getText().equals("18-")){
+                    mStoryContent.setText("All");
+                }
+            }
+        });
+
         mCurrentStory = mAccount.mStories;
+        Log.d("test", "currentStory = " + mCurrentStory);
 
         return rootView;
     }
@@ -65,12 +98,10 @@ public class StoryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (mStories.size() == 0) {
-            loadNewStories();
-        }
+        showNextStory();
     }
 
-    public void loadNewStories() {
+    private void loadNewStories() {
         RetrofitStoryRequest storyRequest = new RetrofitStoryRequest(getCurrentRequest() * LOAD_SIZE+1,
                 getCurrentRequest() * LOAD_SIZE + LOAD_SIZE);
         ((MainActivity) getActivity()).getSpiceManager().execute(storyRequest,
@@ -81,21 +112,23 @@ public class StoryFragment extends Fragment {
     }
 
     private int getCurrentRequest() {
-        return (mCurrentStory-1) / LOAD_SIZE;
-    }
-
-    private int getCurrentStory() {
-        return (mCurrentStory-1) % LOAD_SIZE;
+        return mCurrentStory / LOAD_SIZE;
     }
 
     private void showNextStory() {
-        if (mStories.size() == 0 || (getCurrentStory() == 0 && mStories.get(getCurrentStory()).id != mCurrentStory)) {
+        NextStory next = NextStoryFabric.getNextStoryByKey(mStoryContent.getText().toString());
+        Story s = next.nextStory(mRepository, mCurrentStory+1);
+        if (s == null) {
+            if (mCurrentStory % LOAD_SIZE != 0)
+                mCurrentStory = (getCurrentRequest() + 1) * LOAD_SIZE;
             loadNewStories();
-            return;
+        } else {
+            mTvStoryText.scrollTo(0, 0);
+            mLikeButton.setChecked(false);
+            mTvStoryText.setText(s.text);
+            mCurrentStory = (int)s.id;
+            Log.d("test", s.toString());
         }
-        mTvStoryText.scrollTo(0, 0);
-        mTvStoryText.setText(mStories.get(getCurrentStory()).text);
-        mCurrentStory++;
     }
 
     @Override
@@ -105,17 +138,23 @@ public class StoryFragment extends Fragment {
         mAccount.save(getActivity());
     }
 
-    public final class StoryRequestListener implements RequestListener<Story.StoryList> {
+    private final class StoryRequestListener implements RequestListener<Story.StoryList> {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
+            Log.d("test", "failure");
             mStoryLoading.setVisibility(View.GONE);
         }
 
         @Override
         public void onRequestSuccess(final Story.StoryList result) {
+            Log.d("test", "success start, size = " + result.size());
             mStoryLoading.setVisibility(View.GONE);
-            mStories = result;
+            for(Story s : result) {
+                mRepository.create(s);
+            }
+            mRepository.deleteStoryWithMinId(mCurrentStory);
+            Log.d("test", "success end");
             showNextStory();
         }
     }

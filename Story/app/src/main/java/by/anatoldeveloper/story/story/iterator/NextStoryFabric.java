@@ -1,0 +1,18 @@
+package by.anatoldeveloper.story.story.iterator;
+
+/**
+ * Created by Anatol on 21.02.2015.
+ */
+public class NextStoryFabric {
+
+    public static NextStory getNextStoryByKey(String key) {
+        if (key.equals("All"))
+            return new NextAnyStory();
+        if (key.equals("18+"))
+            return new NextSexStory();
+        if (key.equals("18-"))
+            return new NextPublicStory();
+        return null;
+    }
+
+}

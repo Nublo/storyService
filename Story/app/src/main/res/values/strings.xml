@@ -4,5 +4,10 @@
     <string name="app_name">Story</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="next_story">Next</string>
+    <string name="like_story">Like</string>
+    <string name="story_all">All</string>
+    <string name="story_sex">18+</string>
+    <string name="story_public">18-</string>
 
 </resources>

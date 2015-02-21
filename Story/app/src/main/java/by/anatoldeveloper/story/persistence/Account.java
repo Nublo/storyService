@@ -18,16 +18,16 @@ public class Account {
     public void save(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(STORY_READ, mStories);
+        if (mStories >= 0)
+            editor.putInt(STORY_READ, mStories);
         editor.putInt(SEX_STORY_READ, mSexStories);
         editor.commit();
     }
 
     public void restore(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        mStories = prefs.getInt(STORY_READ, 1);
+        mStories = prefs.getInt(STORY_READ, 0);
         mSexStories = prefs.getInt(SEX_STORY_READ, 0);
     }
-
 
 }
