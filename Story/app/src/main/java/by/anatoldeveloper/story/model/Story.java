@@ -22,7 +22,7 @@ public class Story {
     public String text;
     @DatabaseField(columnName = SEX_FIELD_NAME)
     public boolean sex;
-    @DatabaseField(canBeNull = false, foreign = true)
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
     public Site site;
     @DatabaseField(columnName = FAVORITE_FIELD_NAME)
     public boolean favorite;
@@ -63,7 +63,8 @@ public class Story {
 
     @Override
     public String toString() {
-        return String.format("[id = %d, text = %s, sex = %s, favourite = %s]", id, text, (sex ? "true":"false"), (favorite ? "true" : "false"));
+        return String.format("[id = %d, text = %s, sex = %s, favourite = %s, site = %s]",
+                id, text, (sex ? "true":"false"), (favorite ? "true" : "false"), site.toString());
     }
 
     public static class StoryList extends ArrayList<Story> {

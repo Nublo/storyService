@@ -1,12 +1,13 @@
-package by.anatoldeveloper.story;
+package by.anatoldeveloper.story.fragment;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,7 +19,9 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
-import by.anatoldeveloper.story.data.StoryRepository;
+import by.anatoldeveloper.story.MainActivity;
+import by.anatoldeveloper.story.R;
+import by.anatoldeveloper.story.model.Site;
 import by.anatoldeveloper.story.model.Story;
 import by.anatoldeveloper.story.network.RetrofitStoryRequest;
 import by.anatoldeveloper.story.persistence.Account;
@@ -29,15 +32,14 @@ import by.anatoldeveloper.story.story.iterator.NextStoryFabric;
  * Created by Anatol on 11.12.2014.
  * Project Story
  */
-public class StoryFragment extends Fragment {
+public class StoryFragment extends BaseFragment {
 
     private static final int LOAD_SIZE = 100;
 
+    private Account mAccount;
     private TextView mTvStoryText;
     private ProgressBar mStoryLoading;
-    private Account mAccount;
     private int mCurrentStory;
-    private StoryRepository mRepository;
     private ToggleButton mLikeButton;
     private Button mStoryContent;
 
@@ -46,12 +48,11 @@ public class StoryFragment extends Fragment {
         super.onAttach(activity);
         mAccount = new Account();
         mAccount.restore(activity);
-        mRepository = new StoryRepository(activity);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_story, container, false);
         mTvStoryText = (TextView) rootView.findViewById(R.id.tv_main_text);
         mTvStoryText.setMovementMethod(new ScrollingMovementMethod());
         mTvStoryText.setScrollbarFadingEnabled(false);
@@ -96,6 +97,12 @@ public class StoryFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main, menu);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         showNextStory();
@@ -124,9 +131,12 @@ public class StoryFragment extends Fragment {
             loadNewStories();
         } else {
             mTvStoryText.scrollTo(0, 0);
-            mLikeButton.setChecked(false);
+            mLikeButton.setChecked(s.favorite);
             mTvStoryText.setText(s.text);
             mCurrentStory = (int)s.id;
+            for (Site site : mRepository.allSites()) {
+                Log.d("test", site.toString());
+            }
             Log.d("test", s.toString());
         }
     }
@@ -153,7 +163,7 @@ public class StoryFragment extends Fragment {
             for(Story s : result) {
                 mRepository.create(s);
             }
-            mRepository.deleteStoryWithMinId(mCurrentStory);
+            mRepository.deleteNotFavoriteStoriesWithMinId(mCurrentStory);
             Log.d("test", "success end");
             showNextStory();
         }

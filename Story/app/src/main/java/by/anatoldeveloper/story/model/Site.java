@@ -20,6 +20,11 @@ public class Site {
     }
 
     @Override
+    public String toString() {
+        return String.format("[id = %d, name = %s]", id, name);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

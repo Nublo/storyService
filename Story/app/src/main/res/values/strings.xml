@@ -3,7 +3,7 @@
 
     <string name="app_name">Story</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_stories">Stories</string>
     <string name="next_story">Next</string>
     <string name="like_story">Like</string>
     <string name="story_all">All</string>

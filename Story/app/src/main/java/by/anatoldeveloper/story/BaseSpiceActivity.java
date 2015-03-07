@@ -29,7 +29,7 @@ public class BaseSpiceActivity extends ActionBarActivity {
         super.onStop();
     }
 
-    protected SpiceManager getSpiceManager() {
+    public SpiceManager getSpiceManager() {
         return spiceManager;
     }
 

@@ -23,6 +23,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     private static final int DATABASE_VERSION = 1;
 
     private Dao<Story, Integer> storyDao = null;
+    private Dao<Site, Integer> siteDao = null;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -49,6 +50,13 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             storyDao = getDao(Story.class);
         }
         return storyDao;
+    }
+
+    public Dao<Site, Integer> getSiteDao() throws SQLException {
+        if (siteDao == null) {
+            siteDao = getDao(Site.class);
+        }
+        return siteDao;
     }
 
     @Override
