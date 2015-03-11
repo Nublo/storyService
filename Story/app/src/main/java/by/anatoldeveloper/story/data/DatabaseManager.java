@@ -5,7 +5,8 @@ import android.content.Context;
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 /**
- * Created by Anatol on 18.02.2015.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class DatabaseManager {
 

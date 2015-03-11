@@ -6,7 +6,8 @@ import com.j256.ormlite.table.DatabaseTable;
 import java.util.ArrayList;
 
 /**
- * Created by Anatol on 26.12.2014.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 
 @DatabaseTable(tableName = "story")
@@ -22,7 +23,7 @@ public class Story {
     public String text;
     @DatabaseField(columnName = SEX_FIELD_NAME)
     public boolean sex;
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoCreate = true, foreignAutoRefresh = true)
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
     public Site site;
     @DatabaseField(columnName = FAVORITE_FIELD_NAME)
     public boolean favorite;
@@ -37,7 +38,7 @@ public class Story {
         int result = 1;
         result = prime * result + (int)id;
         result = prime * result + text.hashCode();
-        result = prime * result + (sex == true ? 1 : 0);
+        result = prime * result + (sex ? 1 : 0);
         result = prime * result + (site == null ? 0 : site.hashCode());
         return result;
     }

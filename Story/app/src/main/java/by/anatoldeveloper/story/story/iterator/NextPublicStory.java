@@ -4,7 +4,8 @@ import by.anatoldeveloper.story.data.StoryRepository;
 import by.anatoldeveloper.story.model.Story;
 
 /**
- * Created by Anatol on 21.02.2015.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class NextPublicStory implements NextStory {
 

@@ -8,7 +8,8 @@ import by.anatoldeveloper.story.data.DatabaseManager;
 import by.anatoldeveloper.story.network.RetrofitStoryService;
 
 /**
- * Created by Anatol on 27.12.2014.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class BaseSpiceActivity extends ActionBarActivity {
 

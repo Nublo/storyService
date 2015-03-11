@@ -3,7 +3,8 @@ package by.anatoldeveloper.story.network;
 import com.octo.android.robospice.retrofit.RetrofitGsonSpiceService;
 
 /**
- * Created by Anatol on 26.12.2014.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class RetrofitStoryService extends RetrofitGsonSpiceService {
 

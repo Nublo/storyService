@@ -15,7 +15,8 @@ import by.anatoldeveloper.story.model.Site;
 import by.anatoldeveloper.story.model.Story;
 
 /**
- * Created by Anatol on 18.02.2015.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class StoryRepository {
 
@@ -36,6 +37,16 @@ public class StoryRepository {
 
     public int create(Story story)
     {
+        try {
+            Site s = siteByName(story.site.name);
+            if (s == null) {
+                siteDao.create(story.site);
+            } else {
+                story.site.id = s.id;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try {
             return storyDao.create(story);
         } catch (SQLException e) {
@@ -100,8 +111,7 @@ public class StoryRepository {
             Where<Story, Integer> where = builder.where();
             where.ge(Story.ID_FIELD_NAME, minId).
                 and().eq(Story.SEX_FIELD_NAME, sex);
-            Story s = storyDao.queryForFirst(where.prepare());
-            return s;
+            return storyDao.queryForFirst(where.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -114,18 +124,19 @@ public class StoryRepository {
             Where<Story, Integer> where = builder.where();
             where.ge(Story.ID_FIELD_NAME, minId).
                     and().eq(Story.FAVORITE_FIELD_NAME, true);
-            Story s = storyDao.queryForFirst(where.prepare());
-            return s;
+            return storyDao.queryForFirst(where.prepare());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public List<Site> allSites() {
+    public Site siteByName(String siteName) {
         try {
-            return siteDao.queryForAll();
-        } catch (SQLException e) {
+            QueryBuilder<Site, Integer> builder = siteDao.queryBuilder();
+            return siteDao.queryForFirst(builder.where().eq(Site.NAME_FIELD_NAME, siteName).prepare());
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return null;

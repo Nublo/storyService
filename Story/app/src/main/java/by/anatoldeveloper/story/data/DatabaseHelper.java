@@ -15,7 +15,8 @@ import by.anatoldeveloper.story.model.Site;
 import by.anatoldeveloper.story.model.Story;
 
 /**
- * Created by Anatol on 18.02.2015.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 

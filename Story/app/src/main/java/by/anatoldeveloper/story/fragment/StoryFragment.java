@@ -1,10 +1,10 @@
 package by.anatoldeveloper.story.fragment;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -19,9 +19,12 @@ import com.octo.android.robospice.persistence.DurationInMillis;
 import com.octo.android.robospice.persistence.exception.SpiceException;
 import com.octo.android.robospice.request.listener.RequestListener;
 
+import java.util.List;
+
+import by.anatoldeveloper.story.BuildConfig;
 import by.anatoldeveloper.story.MainActivity;
 import by.anatoldeveloper.story.R;
-import by.anatoldeveloper.story.model.Site;
+import by.anatoldeveloper.story.Utils;
 import by.anatoldeveloper.story.model.Story;
 import by.anatoldeveloper.story.network.RetrofitStoryRequest;
 import by.anatoldeveloper.story.persistence.Account;
@@ -73,7 +76,7 @@ public class StoryFragment extends BaseFragment {
                 boolean favorite = mLikeButton.isChecked();
                 mRepository.updateFavoriteById(favorite, mCurrentStory);
                 Story s = mRepository.getStoryById(mCurrentStory);
-                Log.d("test", "Story after update : " + s.toString());
+                Utils.log("Story after update : " + s.toString());
             }
         });
         mStoryContent = (Button) rootView.findViewById(R.id.btn_story_content);
@@ -89,9 +92,14 @@ public class StoryFragment extends BaseFragment {
                 }
             }
         });
+        if (BuildConfig.CATEGORIES_ENABLED) {
+            mStoryContent.setVisibility(View.VISIBLE);
+        } else {
+            mStoryContent.setVisibility(View.GONE);
+        }
 
         mCurrentStory = mAccount.mStories;
-        Log.d("test", "currentStory = " + mCurrentStory);
+        Utils.log("currentStory = " + mCurrentStory);
 
         return rootView;
     }
@@ -134,10 +142,7 @@ public class StoryFragment extends BaseFragment {
             mLikeButton.setChecked(s.favorite);
             mTvStoryText.setText(s.text);
             mCurrentStory = (int)s.id;
-            for (Site site : mRepository.allSites()) {
-                Log.d("test", site.toString());
-            }
-            Log.d("test", s.toString());
+            Utils.log(s.toString());
         }
     }
 
@@ -152,19 +157,39 @@ public class StoryFragment extends BaseFragment {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            Log.d("test", "failure");
+            if (spiceException.getMessage().equalsIgnoreCase("Network is not available")) {
+                Utils.log("network connection failed");
+            } else {
+                Utils.log("server is not responding");
+            }
             mStoryLoading.setVisibility(View.GONE);
         }
 
         @Override
         public void onRequestSuccess(final Story.StoryList result) {
-            Log.d("test", "success start, size = " + result.size());
-            mStoryLoading.setVisibility(View.GONE);
-            for(Story s : result) {
+            new InsertDataTask().execute(result);
+        }
+    }
+
+    private final class InsertDataTask extends AsyncTask<List<Story>, Void, Void> {
+
+        @SafeVarargs
+        @Override
+        protected final Void doInBackground(List<Story>... params) {
+            List<Story> stories = params[0];
+            Utils.log("success start, size = " + stories.size());
+            for(Story s : stories) {
                 mRepository.create(s);
             }
             mRepository.deleteNotFavoriteStoriesWithMinId(mCurrentStory);
-            Log.d("test", "success end");
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            mStoryLoading.setVisibility(View.GONE);
+            Utils.log("success end");
             showNextStory();
         }
     }

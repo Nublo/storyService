@@ -6,7 +6,10 @@ import android.view.MenuItem;
 import by.anatoldeveloper.story.fragment.FavoriteStoriesFragment;
 import by.anatoldeveloper.story.fragment.StoryFragment;
 
-
+/**
+ * Created by Anatol on 07.03.2015.
+ * Project Story
+ */
 public class MainActivity extends BaseSpiceActivity {
 
     @Override

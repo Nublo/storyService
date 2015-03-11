@@ -5,7 +5,8 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 /**
- * Created by Anatol on 27.12.2014.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class Account {
 
@@ -21,7 +22,7 @@ public class Account {
         if (mStories >= 0)
             editor.putInt(STORY_READ, mStories);
         editor.putInt(SEX_STORY_READ, mSexStories);
-        editor.commit();
+        editor.apply();
     }
 
     public void restore(Context context) {

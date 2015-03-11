@@ -1,7 +1,8 @@
 package by.anatoldeveloper.story.story.iterator;
 
 /**
- * Created by Anatol on 21.02.2015.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class NextStoryFabric {
 

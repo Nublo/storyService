@@ -5,7 +5,8 @@ import com.octo.android.robospice.request.retrofit.RetrofitSpiceRequest;
 import by.anatoldeveloper.story.model.Story;
 
 /**
- * Created by Anatol on 26.12.2014.
+ * Created by Anatol on 07.03.2015.
+ * Project Story
  */
 public class RetrofitStoryRequest extends RetrofitSpiceRequest<Story.StoryList, StoryRestServer> {
 
