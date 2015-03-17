@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Story</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_stories">Stories</string>
-    <string name="next_story">Next</string>
-    <string name="like_story">Like</string>
-    <string name="story_all">All</string>
+    <string name="app_name">Стыдные истории</string>
+    <string name="action_stories">Избранные</string>
+    <string name="next_story">Далее</string>
+    <string name="like_story">like</string>
+    <string name="story_all">Все</string>
     <string name="story_sex">18+</string>
     <string name="story_public">18-</string>
+    <string name="dialog_title">Ошибка</string>
+    <string name="no_connection_error">Отсутствует интернет соединение. Попробовать ещё раз?</string>
+    <string name="server_error">Сервер не отвечает. Попробовать ещё раз?</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
 
 </resources>
