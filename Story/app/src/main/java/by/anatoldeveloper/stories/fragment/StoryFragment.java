@@ -58,12 +58,11 @@ public class StoryFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_story, container, false);
-        mTvStoryText = (TextView) rootView.findViewById(R.id.tv_main_text);
+        mTvStoryText = (TextView) rootView.findViewById(R.id.tv_story);
         mTvStoryText.setMovementMethod(new ScrollingMovementMethod());
-        mTvStoryText.setScrollbarFadingEnabled(false);
         mStoryLoading = (ProgressWheel) rootView.findViewById(R.id.progressBar);
 
-        Button nextStory = (Button) rootView.findViewById(R.id.btn_main_next);
+        Button nextStory = (Button) rootView.findViewById(R.id.btn_next);
         nextStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -71,7 +70,7 @@ public class StoryFragment extends BaseFragment {
             }
         });
 
-        mLikeButton = (ToggleButton) rootView.findViewById(R.id.tbn_main_like);
+        mLikeButton = (ToggleButton) rootView.findViewById(R.id.tbn_like);
         mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -185,7 +184,6 @@ public class StoryFragment extends BaseFragment {
                 .title(R.string.dialog_title)
                 .content(contentId)
                 .positiveText(R.string.yes)
-                .negativeColor(R.color.app_style_color)
                 .negativeText(R.string.no)
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override

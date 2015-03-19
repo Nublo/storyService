@@ -9,7 +9,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginTop="@dimen/story_item_vertical_margin"
         android:layout_marginBottom="@dimen/story_item_vertical_margin"
-        android:id="@+id/tv_text"
-        android:maxLines="3" />
+        android:id="@+id/tv_story"
+        android:maxLines="3"
+        android:textColor="@color/primary_text"/>
 
 </LinearLayout>

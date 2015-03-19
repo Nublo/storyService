@@ -38,6 +38,7 @@ MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.android.support:recyclerview-v7:21.0.3:17:5
 MERGED from com.android.support:support-v4:21.0.3:16:5
 MERGED from com.nispok:snackbar:2.10.5:10:5
+MERGED from com.github.traex.rippleeffect:library:1.2.4:12:5
 	android:label
 		ADDED from AndroidManifest.xml:12:9
 	android:allowBackup
@@ -83,6 +84,7 @@ MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.android.support:recyclerview-v7:21.0.3:15:5
 MERGED from com.android.support:support-v4:21.0.3:15:5
 MERGED from com.nispok:snackbar:2.10.5:6:5
+MERGED from com.github.traex.rippleeffect:library:1.2.4:8:5
 	android:targetSdkVersion
 		INJECTED from AndroidManifest.xml:0:0
 		INJECTED from AndroidManifest.xml:0:0

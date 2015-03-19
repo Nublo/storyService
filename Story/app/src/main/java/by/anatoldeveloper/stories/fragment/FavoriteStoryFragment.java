@@ -41,11 +41,10 @@ public class FavoriteStoryFragment extends BaseFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_favorite_story, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_story, container, false);
         mCurrentStoryId = getArguments().getInt(STORY_ID);
-        mTvStoryText = (TextView) rootView.findViewById(R.id.tv_text);
+        mTvStoryText = (TextView) rootView.findViewById(R.id.tv_story);
         mTvStoryText.setMovementMethod(new ScrollingMovementMethod());
-        mTvStoryText.setScrollbarFadingEnabled(false);
         Button nextStory = (Button) rootView.findViewById(R.id.btn_next);
         nextStory.setOnClickListener(new View.OnClickListener() {
             @Override

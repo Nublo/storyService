@@ -47,7 +47,7 @@ public class StoryAdapter extends BaseAdapter {
         if (view == null) {
             view = mInflater.inflate(R.layout.story_item, parent, false);
         }
-        TextView storyText = (TextView) view.findViewById(R.id.tv_text);
+        TextView storyText = (TextView) view.findViewById(R.id.tv_story);
         Story s = getItem(position);
         storyText.setText(s.text);
         return view;
