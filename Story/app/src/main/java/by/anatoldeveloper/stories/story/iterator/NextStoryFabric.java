@@ -16,4 +16,15 @@ public class NextStoryFabric {
         return new NextAnyStory();
     }
 
+    public static String getNextTitle(String currentTitle) {
+        if ("All".equals(currentTitle)) {
+            return "18+";
+        } else if ("18+".equals(currentTitle)) {
+            return "18-";
+        } else if ("18-".equals(currentTitle)){
+            return "All";
+        }
+        return "All";
+    }
+
 }

@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="story_item_vertical_margin">2dp</dimen>
+    <dimen name="favorite_empty_size">24sp</dimen>
 </resources>

@@ -13,8 +13,8 @@ android {
         applicationId "by.anatoldeveloper.stories"
         minSdkVersion 14
         targetSdkVersion 21
-        versionCode 3
-        versionName "0.3"
+        versionCode 4
+        versionName "0.4"
     }
     buildTypes {
         release {
@@ -24,6 +24,7 @@ android {
         }
         debug {
             buildConfigField "boolean", "CATEGORIES_ENABLED", "false"
+            applicationIdSuffix ".debug"
         }
     }
 

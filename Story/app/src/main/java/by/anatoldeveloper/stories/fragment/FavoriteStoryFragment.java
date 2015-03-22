@@ -12,10 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import com.nispok.snackbar.Snackbar;
-import com.nispok.snackbar.SnackbarManager;
-
 import by.anatoldeveloper.stories.R;
+import by.anatoldeveloper.stories.Utils;
 import by.anatoldeveloper.stories.model.Story;
 
 /**
@@ -72,6 +70,12 @@ public class FavoriteStoryFragment extends BaseFragment {
         showStoryWithMinId(mCurrentStoryId);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTitle(R.string.favorite_stories);
+    }
+
     private void showStoryWithMinId(int id) {
         Story s = mRepository.getFavoriteStory(id);
         showStory(s);
@@ -84,11 +88,7 @@ public class FavoriteStoryFragment extends BaseFragment {
             mTvStoryText.setText(s.text);
             mCurrentStoryId = (int) s.id;
         } else {
-            SnackbarManager.show(
-                Snackbar.with(getActivity().getApplicationContext())
-                    .text("У вас больше нету любимых историй")
-                    .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
-                , getActivity());
+            Utils.showSnackbar(getActivity(), R.string.no_more_favorite_stories);
         }
     }
 

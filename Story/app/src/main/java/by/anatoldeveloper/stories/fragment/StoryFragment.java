@@ -84,13 +84,8 @@ public class StoryFragment extends BaseFragment {
         mStoryContent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mStoryContent.getText().equals("All")) {
-                    mStoryContent.setText("18+");
-                } else if (mStoryContent.getText().equals("18+")) {
-                    mStoryContent.setText("18-");
-                } else if (mStoryContent.getText().equals("18-")){
-                    mStoryContent.setText("All");
-                }
+                String currentTitle = mStoryContent.getText().toString();
+                mStoryContent.setText(NextStoryFabric.getNextTitle(currentTitle));
             }
         });
         if (BuildConfig.CATEGORIES_ENABLED) {
@@ -173,16 +168,9 @@ public class StoryFragment extends BaseFragment {
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
-            Integer contentId = R.string.no_connection_error;
-            if (spiceException.getMessage().equalsIgnoreCase("Network is not available")) {
-                Utils.log("network connection failed");
-            } else {
-                Utils.log("server is not responding");
-                contentId = R.string.server_error;
-            }
             new MaterialDialog.Builder(getActivity())
                 .title(R.string.dialog_title)
-                .content(contentId)
+                .content(Utils.getError(spiceException))
                 .positiveText(R.string.yes)
                 .negativeText(R.string.no)
                 .callback(new MaterialDialog.ButtonCallback() {
@@ -197,7 +185,15 @@ public class StoryFragment extends BaseFragment {
 
         @Override
         public void onRequestSuccess(final Story.StoryList result) {
-            new InsertDataTask().execute(result);
+            if (result.size() == 0) {
+                new MaterialDialog.Builder(getActivity())
+                        .title(R.string.dialog_title)
+                        .content(R.string.no_more_stories)
+                        .positiveText(R.string.ok)
+                        .show();
+            } else {
+                new InsertDataTask().execute(result);
+            }
         }
     }
 
