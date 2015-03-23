@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion "21.1.1"
+    compileSdkVersion 22
+    buildToolsVersion "21.1.2"
 
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
@@ -12,9 +12,9 @@ android {
     defaultConfig {
         applicationId "by.anatoldeveloper.stories"
         minSdkVersion 14
-        targetSdkVersion 21
-        versionCode 4
-        versionName "0.4"
+        targetSdkVersion 22
+        versionCode 5
+        versionName "0.5"
     }
     buildTypes {
         release {
@@ -37,7 +37,8 @@ repositories{
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:21.0.3'
+    compile 'com.android.support:appcompat-v7:22+'
+    compile 'com.google.android.gms:play-services-analytics:7.0.0'
     compile 'com.octo.android.robospice:robospice:1.4.12'
     compile 'com.octo.android.robospice:robospice-retrofit:1.4.12'
     compile 'com.j256.ormlite:ormlite-android:4.46'

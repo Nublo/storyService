@@ -67,12 +67,14 @@ public class StoryRepository {
     public int updateFavoriteById(boolean favorite, int id) {
         try {
             Story s = getStoryById(id);
-            s.favorite = favorite;
-            return storyDao.update(s);
+            if (s != null) {
+                s.favorite = favorite;
+                return storyDao.update(s);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public int deleteNotFavoriteStoriesWithMinId(int minId) {

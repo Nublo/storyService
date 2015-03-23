@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/font_color">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_marginTop="@dimen/story_item_vertical_margin"
-        android:layout_marginBottom="@dimen/story_item_vertical_margin"
+        android:layout_marginTop="@dimen/control_corner_material"
+        android:layout_marginBottom="@dimen/control_corner_material"
         android:id="@+id/tv_story"
         android:maxLines="3"
-        android:textColor="@color/primary_text"/>
+        android:textColor="@color/primary_text"
+        android:background="@color/font_color"/>
 
 </LinearLayout>

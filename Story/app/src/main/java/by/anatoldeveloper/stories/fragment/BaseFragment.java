@@ -33,7 +33,7 @@ public class BaseFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        setTitle(R.string.app_name);
+        setTitle(R.string.app_title);
     }
 
     @Override

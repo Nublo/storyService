@@ -3,15 +3,14 @@ package by.anatoldeveloper.stories.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import by.anatoldeveloper.stories.BuildConfig;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.Utils;
 import by.anatoldeveloper.stories.model.Story;
@@ -24,10 +23,9 @@ public class FavoriteStoryFragment extends BaseFragment {
 
     private static final String STORY_ID = "story_id";
 
-    private int mCurrentStoryId;
+    private int mCurrentStory;
     private TextView mTvStoryText;
     private ToggleButton mLikeButton;
-    private ViewGroup mStoryLayout;
 
     public static FavoriteStoryFragment newInstance(int storyId) {
         FavoriteStoryFragment fragment = new FavoriteStoryFragment();
@@ -40,14 +38,14 @@ public class FavoriteStoryFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_story, container, false);
-        mCurrentStoryId = getArguments().getInt(STORY_ID);
+        mCurrentStory = getArguments().getInt(STORY_ID);
         mTvStoryText = (TextView) rootView.findViewById(R.id.tv_story);
         mTvStoryText.setMovementMethod(new ScrollingMovementMethod());
         Button nextStory = (Button) rootView.findViewById(R.id.btn_next);
         nextStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showStoryWithMinId(mCurrentStoryId + 1);
+                showStoryWithMinId(mCurrentStory + 1);
             }
         });
         mLikeButton = (ToggleButton) rootView.findViewById(R.id.tbn_like);
@@ -55,19 +53,22 @@ public class FavoriteStoryFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 boolean favorite = mLikeButton.isChecked();
-                mRepository.updateFavoriteById(favorite, mCurrentStoryId);
-                Story s = mRepository.getStoryById(mCurrentStoryId);
-                Log.d("test", "Story after update : " + s.toString());
+                mRepository.updateFavoriteById(favorite, mCurrentStory);
+                if (BuildConfig.DEBUG) {
+                    Story s = mRepository.getStoryById(mCurrentStory);
+                    if (s != null) {
+                        Utils.log("Story after update : " + s.toString());
+                    }
+                } // remove in release code
             }
         });
-        mStoryLayout = (LinearLayout)rootView;
         return rootView;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        showStoryWithMinId(mCurrentStoryId);
+        showStoryWithMinId(mCurrentStory);
     }
 
     @Override
@@ -86,7 +87,7 @@ public class FavoriteStoryFragment extends BaseFragment {
             mTvStoryText.scrollTo(0, 0);
             mLikeButton.setChecked(s.favorite);
             mTvStoryText.setText(s.text);
-            mCurrentStoryId = (int) s.id;
+            mCurrentStory = (int) s.id;
         } else {
             Utils.showSnackbar(getActivity(), R.string.no_more_favorite_stories);
         }

@@ -26,6 +26,7 @@ import by.anatoldeveloper.stories.BuildConfig;
 import by.anatoldeveloper.stories.MainActivity;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.Utils;
+import by.anatoldeveloper.stories.analytics.EventProducer;
 import by.anatoldeveloper.stories.model.Story;
 import by.anatoldeveloper.stories.network.RetrofitStoryRequest;
 import by.anatoldeveloper.stories.persistence.Account;
@@ -76,8 +77,12 @@ public class StoryFragment extends BaseFragment {
             public void onClick(View v) {
                 boolean favorite = mLikeButton.isChecked();
                 mRepository.updateFavoriteById(favorite, mCurrentStory);
-                Story s = mRepository.getStoryById(mCurrentStory);
-                Utils.log("Story after update : " + s.toString());
+                if (BuildConfig.DEBUG) {
+                    Story s = mRepository.getStoryById(mCurrentStory);
+                    if (s != null) {
+                        Utils.log("Story after update : " + s.toString());
+                    }
+                } // remove in release code
             }
         });
         mStoryContent = (Button) rootView.findViewById(R.id.btn_story_content);
@@ -95,7 +100,6 @@ public class StoryFragment extends BaseFragment {
         }
 
         mCurrentStory = mAccount.mStories;
-        Utils.log("currentStory = " + mCurrentStory);
         isLoading = false;
 
         return rootView;
@@ -141,6 +145,7 @@ public class StoryFragment extends BaseFragment {
     }
 
     private void showNextStory() {
+        EventProducer.analyticsTrack(getActivity(), mLikeButton.isChecked(), mCurrentStory);
         NextStory next = NextStoryFabric.getNextStoryByKey(mStoryContent.getText().toString());
         Story s = next.nextStory(mRepository, mCurrentStory+1);
         if (s == null) {
