@@ -26,7 +26,7 @@ import by.anatoldeveloper.stories.BuildConfig;
 import by.anatoldeveloper.stories.MainActivity;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.Utils;
-import by.anatoldeveloper.stories.analytics.EventProducer;
+import by.anatoldeveloper.stories.analytics.Analytics;
 import by.anatoldeveloper.stories.model.Story;
 import by.anatoldeveloper.stories.network.RetrofitStoryRequest;
 import by.anatoldeveloper.stories.persistence.Account;
@@ -145,7 +145,7 @@ public class StoryFragment extends BaseFragment {
     }
 
     private void showNextStory() {
-        EventProducer.analyticsTrack(getActivity(), mLikeButton.isChecked(), mCurrentStory);
+        Analytics.trackStory(getActivity(), mLikeButton.isChecked(), mCurrentStory);
         NextStory next = NextStoryFabric.getNextStoryByKey(mStoryContent.getText().toString());
         Story s = next.nextStory(mRepository, mCurrentStory+1);
         if (s == null) {

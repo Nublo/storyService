@@ -12,13 +12,13 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/tv_story"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/primary_text"
         android:background="@color/font_color"
-        android:id="@+id/tv_story"
         android:scrollbars = "vertical"/>
 
     <RelativeLayout
