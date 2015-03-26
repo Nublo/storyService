@@ -8,4 +8,5 @@
     <color name="primary_text">#212121</color>
     <color name="text">#FFFFFF</color>
     <color name="font_color">#E0E0E0</color>
+    <color name="snackbar">#90A4AE</color>
 </resources>

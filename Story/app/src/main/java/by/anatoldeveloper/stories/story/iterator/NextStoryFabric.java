@@ -27,4 +27,12 @@ public class NextStoryFabric {
         return "All";
     }
 
+    public static NextStory anyStory() {
+        return new NextAnyStory();
+    }
+
+    public static NextStory favoriteStory() {
+        return new NextFavoriteStory();
+    }
+
 }

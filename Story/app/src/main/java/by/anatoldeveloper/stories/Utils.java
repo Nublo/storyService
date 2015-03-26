@@ -27,7 +27,7 @@ public class Utils {
                 .type(SnackbarType.SINGLE_LINE)
                 .duration(Snackbar.SnackbarDuration.LENGTH_SHORT)
                 .text(activity.getString(resourceId))
-                .textColor(activity.getResources().getColor(R.color.accent));
+                .textColor(activity.getResources().getColor(R.color.snackbar));
         SnackbarManager.show(bar);
     }
 

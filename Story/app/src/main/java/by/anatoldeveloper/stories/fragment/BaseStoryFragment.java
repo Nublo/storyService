@@ -1,0 +1,93 @@
+package by.anatoldeveloper.stories.fragment;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.text.method.ScrollingMovementMethod;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.TextView;
+import android.widget.ToggleButton;
+
+import by.anatoldeveloper.stories.BuildConfig;
+import by.anatoldeveloper.stories.R;
+import by.anatoldeveloper.stories.Utils;
+import by.anatoldeveloper.stories.model.Story;
+
+/**
+ * Created by Anatol on 26.03.2015.
+ * Project Story
+ */
+public abstract class BaseStoryFragment extends BaseFragment{
+
+    protected int mCurrentStory;
+    protected TextView mTvStoryText;
+    protected ToggleButton mLikeButton;
+    protected Boolean isAnimating = false;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_story, container, false);
+
+        mTvStoryText = (TextView) rootView.findViewById(R.id.tv_story);
+        mTvStoryText.setMovementMethod(new ScrollingMovementMethod());
+        mLikeButton = (ToggleButton) rootView.findViewById(R.id.tbn_like);
+        mLikeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean favorite = mLikeButton.isChecked();
+                mRepository.updateFavoriteById(favorite, mCurrentStory);
+                if (BuildConfig.DEBUG) {
+                    Story s = mRepository.getStoryById(mCurrentStory);
+                    if (s != null) {
+                        Utils.log("Story after update : " + s.toString());
+                    }
+                } // remove in release code
+            }
+        });
+
+        initView(rootView);
+
+        return rootView;
+    }
+
+    protected abstract void initView(View rootView);
+
+    protected void showStory(Story s) {
+        mTvStoryText.scrollTo(0, 0);
+        mLikeButton.setChecked(s.favorite);
+        mTvStoryText.setText(s.text);
+        mCurrentStory = (int) s.id;
+        Utils.log(s.toString());
+    }
+
+    protected void showStoryWithAnimation(final Story s) {
+        Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+        final Animation slideFromRight = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right);
+        slideFromRight.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                isAnimating = false;
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) { isAnimating = true; }
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showStory(s);
+                mTvStoryText.startAnimation(slideFromRight);
+            }
+            @Override
+            public void onAnimationRepeat(Animation animation) {}
+        });
+        mTvStoryText.startAnimation(fadeOut);
+    }
+
+}

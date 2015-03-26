@@ -32,7 +32,7 @@ public class Analytics {
     }
 
     public static void trackStory(Activity activity, boolean isLikedStory, int story) {
-        if (story % 1000 == 0) {
+        if (story % 1000 == 0 && story > 0) {
             trackEventRead(activity, story);
         }
         if (isLikedStory) {

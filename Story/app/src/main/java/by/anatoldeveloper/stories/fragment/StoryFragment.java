@@ -2,17 +2,10 @@ package by.anatoldeveloper.stories.fragment;
 
 import android.app.Activity;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.method.ScrollingMovementMethod;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.octo.android.robospice.persistence.DurationInMillis;
@@ -22,7 +15,6 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.util.List;
 
-import by.anatoldeveloper.stories.BuildConfig;
 import by.anatoldeveloper.stories.MainActivity;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.Utils;
@@ -37,72 +29,35 @@ import by.anatoldeveloper.stories.story.iterator.NextStoryFabric;
  * Created by Anatol on 11.12.2014.
  * Project Story
  */
-public class StoryFragment extends BaseFragment {
+public class StoryFragment extends BaseStoryFragment {
 
     private static final int LOAD_SIZE = 100;
 
     private Account mAccount;
-    private TextView mTvStoryText;
     private ProgressWheel mStoryLoading;
-    private int mCurrentStory;
-    private ToggleButton mLikeButton;
-    private Button mStoryContent;
-    private Boolean isLoading;
+    private Boolean isLoading = false;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mAccount = new Account();
         mAccount.restore(activity);
+        mCurrentStory = mAccount.mStories;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_story, container, false);
-        mTvStoryText = (TextView) rootView.findViewById(R.id.tv_story);
-        mTvStoryText.setMovementMethod(new ScrollingMovementMethod());
+    protected void initView(View rootView) {
         mStoryLoading = (ProgressWheel) rootView.findViewById(R.id.progressBar);
-
         Button nextStory = (Button) rootView.findViewById(R.id.btn_next);
         nextStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showNextStory();
+                if (!isAnimating) {
+                    Analytics.trackStory(getActivity(), mLikeButton.isChecked(), mCurrentStory);
+                    showStoryWithMinId(mCurrentStory + 1, true);
+                }
             }
         });
-
-        mLikeButton = (ToggleButton) rootView.findViewById(R.id.tbn_like);
-        mLikeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean favorite = mLikeButton.isChecked();
-                mRepository.updateFavoriteById(favorite, mCurrentStory);
-                if (BuildConfig.DEBUG) {
-                    Story s = mRepository.getStoryById(mCurrentStory);
-                    if (s != null) {
-                        Utils.log("Story after update : " + s.toString());
-                    }
-                } // remove in release code
-            }
-        });
-        mStoryContent = (Button) rootView.findViewById(R.id.btn_story_content);
-        mStoryContent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentTitle = mStoryContent.getText().toString();
-                mStoryContent.setText(NextStoryFabric.getNextTitle(currentTitle));
-            }
-        });
-        if (BuildConfig.CATEGORIES_ENABLED) {
-            mStoryContent.setVisibility(View.VISIBLE);
-        } else {
-            mStoryContent.setVisibility(View.GONE);
-        }
-
-        mCurrentStory = mAccount.mStories;
-        isLoading = false;
-
-        return rootView;
     }
 
     @Override
@@ -114,20 +69,41 @@ public class StoryFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
-        showNextStory();
+        showStoryWithMinId(mCurrentStory, false);
     }
 
-    private void loadNewStories() {
-        if (isLoading) {
-            return;
-        }
+    @Override
+    public void onStop() {
+        super.onStop();
+        mAccount.mStories = mCurrentStory;
+        mAccount.save(getActivity());
+    }
+
+    private void loadNewStories(boolean withAnimation) {
         RetrofitStoryRequest storyRequest = new RetrofitStoryRequest(getCurrentRequest() * LOAD_SIZE+1,
                 getCurrentRequest() * LOAD_SIZE + LOAD_SIZE);
-        ((MainActivity) getActivity()).getSpiceManager().execute(storyRequest,
-                "story:" + getCurrentRequest(),
-                DurationInMillis.ONE_MINUTE * 5,
-                new StoryRequestListener());
+        ((MainActivity) getActivity()).getSpiceManager().execute(storyRequest, "story:" + getCurrentRequest(),
+                DurationInMillis.ONE_MINUTE * 5, new StoryRequestListener(withAnimation));
         startLoadingProcess();
+    }
+
+    private int getCurrentRequest() {
+        return mCurrentStory / LOAD_SIZE;
+    }
+
+    private void showStoryWithMinId(int id, boolean withAnimation) {
+        NextStory next = NextStoryFabric.anyStory();
+        Story s = next.nextStory(mRepository, id);
+        if (s != null && withAnimation) {
+            showStoryWithAnimation(s);
+        } else if (s != null) {
+            showStory(s);
+        } else if (!isLoading) {
+            if (mCurrentStory % LOAD_SIZE != 0) {
+                mCurrentStory = (getCurrentRequest() + 1) * LOAD_SIZE;
+            }
+            loadNewStories(withAnimation);
+        }
     }
 
     private void startLoadingProcess() {
@@ -140,36 +116,13 @@ public class StoryFragment extends BaseFragment {
         isLoading = false;
     }
 
-    private int getCurrentRequest() {
-        return mCurrentStory / LOAD_SIZE;
-    }
-
-    private void showNextStory() {
-        Analytics.trackStory(getActivity(), mLikeButton.isChecked(), mCurrentStory);
-        NextStory next = NextStoryFabric.getNextStoryByKey(mStoryContent.getText().toString());
-        Story s = next.nextStory(mRepository, mCurrentStory+1);
-        if (s == null) {
-            if (mCurrentStory % LOAD_SIZE != 0)
-                mCurrentStory = (getCurrentRequest() + 1) * LOAD_SIZE;
-            loadNewStories();
-        } else {
-            mTvStoryText.scrollTo(0, 0);
-            mLikeButton.setChecked(s.favorite);
-            mTvStoryText.setText(s.text);
-            mCurrentStory = (int)s.id;
-            Utils.log(s.toString());
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mCurrentStory--;
-        mAccount.mStories = mCurrentStory;
-        mAccount.save(getActivity());
-    }
-
     private final class StoryRequestListener implements RequestListener<Story.StoryList> {
+
+        private boolean withAnimation;
+
+        public StoryRequestListener(boolean withAnimation) {
+            this.withAnimation = withAnimation;
+        }
 
         @Override
         public void onRequestFailure(SpiceException spiceException) {
@@ -181,7 +134,7 @@ public class StoryFragment extends BaseFragment {
                 .callback(new MaterialDialog.ButtonCallback() {
                     @Override
                     public void onPositive(MaterialDialog dialog) {
-                        showNextStory();
+                        showStoryWithMinId(mCurrentStory + 1, withAnimation);
                     }
                 })
                 .show();
@@ -197,12 +150,18 @@ public class StoryFragment extends BaseFragment {
                         .positiveText(R.string.ok)
                         .show();
             } else {
-                new InsertDataTask().execute(result);
+                new InsertDataTask(withAnimation).execute(result);
             }
         }
     }
 
     private final class InsertDataTask extends AsyncTask<List<Story>, Void, Void> {
+
+        private boolean withAnimation;
+
+        public InsertDataTask(boolean withAnimation) {
+            this.withAnimation = withAnimation;
+        }
 
         @SafeVarargs
         @Override
@@ -221,7 +180,7 @@ public class StoryFragment extends BaseFragment {
             super.onPostExecute(result);
             stopLoadingProcess();
             Utils.log("success end");
-            showNextStory();
+            showStoryWithMinId(mCurrentStory+1, withAnimation);
         }
     }
 
