@@ -35,7 +35,7 @@ public class MainActivity extends BaseSpiceActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_favorite) {
             getSupportFragmentManager().beginTransaction().
                 replace(R.id.container, new FavoriteStoriesFragment()).addToBackStack(null).commit();
             return true;

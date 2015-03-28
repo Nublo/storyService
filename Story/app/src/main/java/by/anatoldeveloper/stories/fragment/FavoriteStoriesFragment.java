@@ -38,7 +38,7 @@ public class FavoriteStoriesFragment extends BaseFragment {
             }
         });
         TextView favoriteLabel = (TextView) rootView.findViewById(R.id.favorite);
-        showLayout(lvStories, favoriteLabel, favoriteStories.size() > 0 ? true : false);
+        showLayout(lvStories, favoriteLabel, favoriteStories.size() > 0);
         return rootView;
     }
 

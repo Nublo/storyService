@@ -12,9 +12,11 @@ public class Account {
 
     private static final String STORY_READ = "stories";
     private static final String SEX_STORY_READ = "sex_stories";
+    private static final String UNDO = "undo";
 
     public int mStories;
     public int mSexStories;
+    public boolean mUndo;
 
     public void save(Context context) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -22,6 +24,7 @@ public class Account {
         if (mStories >= 0)
             editor.putInt(STORY_READ, mStories);
         editor.putInt(SEX_STORY_READ, mSexStories);
+        editor.putBoolean(UNDO, mUndo);
         editor.apply();
     }
 
@@ -29,6 +32,7 @@ public class Account {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         mStories = prefs.getInt(STORY_READ, 0);
         mSexStories = prefs.getInt(SEX_STORY_READ, 0);
+        mUndo = prefs.getBoolean(UNDO, true);
     }
 
 }

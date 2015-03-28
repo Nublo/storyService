@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -63,10 +64,29 @@ public abstract class BaseStoryFragment extends BaseFragment{
         Utils.log(s.toString());
     }
 
-    protected void showStoryWithAnimation(final Story s) {
+    protected void showUndoIcon() {
+        if (menu != null) {
+            MenuItem menuItem = menu.findItem(R.id.action_undo);
+            if (menuItem != null) {
+                menuItem.setVisible(true);
+            }
+        }
+    }
+
+    protected void showNextStoryWithAnimation(Story s) {
         Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-        final Animation slideFromRight = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right);
-        slideFromRight.setAnimationListener(new Animation.AnimationListener() {
+        Animation slideFromRight = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right);
+        showStoryWithAnimation(s, fadeOut, slideFromRight);
+    }
+
+    protected void showPreviousStoryWithAnimation(Story s) {
+        Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+        Animation slideFromLeft = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_left);
+        showStoryWithAnimation(s, fadeOut, slideFromLeft);
+    }
+
+    private void showStoryWithAnimation(final Story s, final Animation firstAnim, final Animation secondAnim) {
+        secondAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {}
             @Override
@@ -76,18 +96,18 @@ public abstract class BaseStoryFragment extends BaseFragment{
             @Override
             public void onAnimationRepeat(Animation animation) {}
         });
-        fadeOut.setAnimationListener(new Animation.AnimationListener() {
+        firstAnim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) { isAnimating = true; }
             @Override
             public void onAnimationEnd(Animation animation) {
                 showStory(s);
-                mTvStoryText.startAnimation(slideFromRight);
+                mTvStoryText.startAnimation(secondAnim);
             }
             @Override
             public void onAnimationRepeat(Animation animation) {}
         });
-        mTvStoryText.startAnimation(fadeOut);
+        mTvStoryText.startAnimation(firstAnim);
     }
 
 }

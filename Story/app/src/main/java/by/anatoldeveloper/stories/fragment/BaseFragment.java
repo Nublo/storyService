@@ -17,6 +17,7 @@ import by.anatoldeveloper.stories.data.StoryRepository;
 public class BaseFragment extends Fragment {
 
     protected StoryRepository mRepository;
+    protected Menu menu;
 
     @Override
     public void onAttach(Activity activity) {
@@ -40,6 +41,7 @@ public class BaseFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.emty_menu, menu);
+        this.menu = menu;
     }
 
     @Override

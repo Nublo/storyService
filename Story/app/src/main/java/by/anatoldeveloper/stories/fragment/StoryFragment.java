@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -64,6 +65,25 @@ public class StoryFragment extends BaseStoryFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_main, menu);
+        this.menu = menu;
+        if (!mAccount.mUndo) {
+            this.menu.findItem(R.id.action_undo).setVisible(false);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_undo && mCurrentStory > 1 && !isAnimating) {
+            NextStory next = NextStoryFabric.anyStory();
+            mCurrentStory = mCurrentStory - 1;
+            Story s = next.nextStory(mRepository, mCurrentStory);
+            showPreviousStoryWithAnimation(s);
+            item.setVisible(false);
+            mAccount.mUndo = false;
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -94,11 +114,15 @@ public class StoryFragment extends BaseStoryFragment {
     private void showStoryWithMinId(int id, boolean withAnimation) {
         NextStory next = NextStoryFabric.anyStory();
         Story s = next.nextStory(mRepository, id);
-        if (s != null && withAnimation) {
-            showStoryWithAnimation(s);
-        } else if (s != null) {
-            showStory(s);
-        } else if (!isLoading) {
+        if (s != null) {
+            if (withAnimation) {
+                showNextStoryWithAnimation(s);
+                showUndoIcon();
+                mAccount.mUndo = true;
+            } else {
+                showStory(s);
+            }
+        }  else if (!isLoading) {
             if (mCurrentStory % LOAD_SIZE != 0) {
                 mCurrentStory = (getCurrentRequest() + 1) * LOAD_SIZE;
             }

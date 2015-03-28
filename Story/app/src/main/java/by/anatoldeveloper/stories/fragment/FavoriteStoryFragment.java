@@ -58,7 +58,7 @@ public class FavoriteStoryFragment extends BaseStoryFragment {
         NextStory nextStory = NextStoryFabric.favoriteStory();
         Story s = nextStory.nextStory(mRepository, id);
         if (s != null && withAnimation) {
-            showStoryWithAnimation(s);
+            showNextStoryWithAnimation(s);
         } else if (s != null) {
             showStory(s);
         } else {
