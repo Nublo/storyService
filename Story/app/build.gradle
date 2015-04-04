@@ -15,10 +15,13 @@ android {
         targetSdkVersion 22
         versionCode 10
         versionName "1.0"
+
+        resConfigs "ru"
+        resConfigs "nodpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug {

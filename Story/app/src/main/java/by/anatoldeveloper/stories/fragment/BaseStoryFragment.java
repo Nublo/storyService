@@ -12,7 +12,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
-import by.anatoldeveloper.stories.BuildConfig;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.Utils;
 import by.anatoldeveloper.stories.model.Story;
@@ -40,12 +39,6 @@ public abstract class BaseStoryFragment extends BaseFragment{
             public void onClick(View v) {
                 boolean favorite = mLikeButton.isChecked();
                 mRepository.updateFavoriteById(favorite, mCurrentStory);
-                if (BuildConfig.DEBUG) {
-                    Story s = mRepository.getStoryById(mCurrentStory);
-                    if (s != null) {
-                        Utils.log("Story after update : " + s.toString());
-                    }
-                } // remove in release code
             }
         });
 

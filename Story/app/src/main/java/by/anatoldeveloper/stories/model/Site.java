@@ -10,9 +10,10 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "site")
 public class Site {
 
+    public static final String ID_FIELD_NAME = "id";
     public static final String NAME_FIELD_NAME = "name";
 
-    @DatabaseField(generatedId = true)
+    @DatabaseField(generatedId = true, columnName = ID_FIELD_NAME)
     public int id;
     @DatabaseField(unique = true, columnName = NAME_FIELD_NAME)
     public String name;

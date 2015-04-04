@@ -14,6 +14,7 @@ import java.util.ArrayList;
 public class Story {
 
     public static final String ID_FIELD_NAME = "id";
+    public static final String ID_SITE_NAME = "site_id";
     public static final String SEX_FIELD_NAME = "sex";
     public static final String FAVORITE_FIELD_NAME = "favorite";
 
@@ -23,7 +24,7 @@ public class Story {
     public String text;
     @DatabaseField(columnName = SEX_FIELD_NAME)
     public boolean sex;
-    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true)
+    @DatabaseField(canBeNull = false, foreign = true, foreignAutoRefresh = true, columnName = ID_SITE_NAME)
     public Site site;
     @DatabaseField(columnName = FAVORITE_FIELD_NAME)
     public boolean favorite;

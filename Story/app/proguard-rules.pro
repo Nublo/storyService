@@ -1,17 +1,30 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in F:\development\android\sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-dontwarn com.google.appengine.api.urlfetch.**
+-dontwarn com.fasterxml.jackson.databind.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn rx.**
+-dontwarn retrofit.converter.JacksonConverter
 
-# Add any project specific keep options here:
+# OrmLite uses reflection
+-keep class com.j256.**
+-keepclassmembers class com.j256.** { *; }
+-keep enum com.j256.**
+-keepclassmembers enum com.j256.** { *; }
+-keep interface com.j256.**
+-keepclassmembers interface com.j256.** { *; }
+-keepclassmembers class * {
+  public <init>(android.content.Context);
+}
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Robospice Configuration
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keep class retrofit.** { *; }
+-keepclasseswithmembers class * {
+    @retrofit.http.* <methods>;
+}
+
+-keep class by.anatoldeveloper.stories.model.**
+-keepclassmembers class by.anatoldeveloper.stories.model.** {
+      *;
+}
