@@ -1,7 +1,10 @@
 package by.anatoldeveloper.stories;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.util.Log;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
@@ -38,6 +41,22 @@ public class Utils {
         } else {
             Utils.log("server is not responding");
             return R.string.server_error;
+        }
+    }
+
+    public static Animation nextStoryAnimation(Activity activity, int orientation) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_bottom);
+        } else {
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_right);
+        }
+    }
+
+    public static Animation prevStoryAnimation(Activity activity, int orientation) {
+        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_top);
+        } else {
+            return AnimationUtils.loadAnimation(activity, R.anim.slide_left);
         }
     }
 

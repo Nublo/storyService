@@ -68,14 +68,16 @@ public abstract class BaseStoryFragment extends BaseFragment{
 
     protected void showNextStoryWithAnimation(Story s) {
         Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-        Animation slideFromRight = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_right);
-        showStoryWithAnimation(s, fadeOut, slideFromRight);
+        Animation slide = Utils.nextStoryAnimation(getActivity(),
+                getResources().getConfiguration().orientation);
+        showStoryWithAnimation(s, fadeOut, slide);
     }
 
     protected void showPreviousStoryWithAnimation(Story s) {
         Animation fadeOut = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
-        Animation slideFromLeft = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_left);
-        showStoryWithAnimation(s, fadeOut, slideFromLeft);
+        Animation slide = Utils.prevStoryAnimation(getActivity(),
+                getResources().getConfiguration().orientation);
+        showStoryWithAnimation(s, fadeOut, slide);
     }
 
     private void showStoryWithAnimation(final Story s, final Animation firstAnim, final Animation secondAnim) {
