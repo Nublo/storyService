@@ -1,5 +1,6 @@
 package by.anatoldeveloper.stories.fragment;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -43,9 +44,24 @@ public class FavoriteStoryFragment extends BaseStoryFragment {
     }
 
     @Override
+    protected void setFavoriteClickListener(boolean favorite) {
+        super.setFavoriteClickListener(favorite);
+        findFavoriteStoriesFragment().refreshFavoriteStories(favorite, mCurrentStory);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
+        if (isTwoPaneLandscapeLargeMode()) {
+            getActivity().getSupportFragmentManager().popBackStack();
+            return;
+        }
         showStoryWithMinId(mCurrentStory, false);
+    }
+
+    private boolean isTwoPaneLandscapeLargeMode() {
+        return getParentFragment() == null && isTablet &&
+                getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Override
@@ -59,10 +75,20 @@ public class FavoriteStoryFragment extends BaseStoryFragment {
         Story s = nextStory.nextStory(mRepository, id);
         if (s != null && withAnimation) {
             showNextStoryWithAnimation(s);
+            findFavoriteStoriesFragment().updateSelectedStoryItem((int) s.id);
         } else if (s != null) {
             showStory(s);
         } else {
             Utils.showSnackbar(getActivity(), R.string.no_more_favorite_stories);
+        }
+    }
+
+    private FavoriteStoriesFragment findFavoriteStoriesFragment() {
+        if (getParentFragment() != null) {
+            return (FavoriteStoriesFragment) getParentFragment();
+        } else {
+            return (FavoriteStoriesFragment) getFragmentManager().
+                    findFragmentByTag(FavoriteStoriesFragment.FAVORITE_STORIES_FRAGMENT);
         }
     }
 

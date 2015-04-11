@@ -11,9 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/material_list_item_height"
-        android:background="@drawable/favorite_story_state"
         android:orientation="horizontal"
-        android:paddingBottom="@dimen/material_list_item_padding_bottom"
         android:paddingTop="@dimen/material_list_item_padding">
 
         <ImageView
@@ -26,10 +24,10 @@
         <TextView
             android:id="@+id/tv_story"
             android:layout_width="wrap_content"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/material_list_item_padding"
             android:maxLines="2"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="16sp"
             android:textColor="@color/primary_text" />
 
     </LinearLayout>

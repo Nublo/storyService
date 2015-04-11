@@ -37,14 +37,17 @@ public abstract class BaseStoryFragment extends BaseFragment{
         mLikeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean favorite = mLikeButton.isChecked();
-                mRepository.updateFavoriteById(favorite, mCurrentStory);
+                setFavoriteClickListener(mLikeButton.isChecked());
             }
         });
 
         initView(rootView);
 
         return rootView;
+    }
+
+    protected void setFavoriteClickListener(boolean favorite) {
+        mRepository.updateFavoriteById(favorite, mCurrentStory);
     }
 
     protected abstract void initView(View rootView);

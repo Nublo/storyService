@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuInflater;
 
-import by.anatoldeveloper.stories.MainActivity;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.data.StoryRepository;
 
@@ -18,11 +17,13 @@ public class BaseFragment extends Fragment {
 
     protected StoryRepository mRepository;
     protected Menu menu;
+    protected boolean isTablet;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mRepository = new StoryRepository(activity);
+        isTablet = activity.getResources().getBoolean(R.bool.isTablet);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class BaseFragment extends Fragment {
     }
 
     protected void setTitle(int resourceId) {
-        ((MainActivity) getActivity()).setTitle(resourceId);
+        getActivity().setTitle(resourceId);
     }
 
 }

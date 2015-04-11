@@ -37,7 +37,8 @@ public class MainActivity extends BaseSpiceActivity {
         int id = item.getItemId();
         if (id == R.id.action_favorite) {
             getSupportFragmentManager().beginTransaction().
-                replace(R.id.container, new FavoriteStoriesFragment()).addToBackStack(null).commit();
+                replace(R.id.container, new FavoriteStoriesFragment(),
+                        FavoriteStoriesFragment.FAVORITE_STORIES_FRAGMENT).addToBackStack(null).commit();
             return true;
         }
         return super.onOptionsItemSelected(item);

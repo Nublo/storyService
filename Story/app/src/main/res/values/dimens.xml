@@ -12,8 +12,7 @@
     <dimen name="button_padding_horizontal_material">8dp</dimen>
     <dimen name="button_padding_vertical_material">4dp</dimen>
 
-    <dimen name="material_list_item_height">88dp</dimen>
-    <dimen name="material_list_item_padding_bottom">20dp</dimen>
+    <dimen name="material_list_item_height">72dp</dimen>
     <dimen name="material_list_item_padding">16dp</dimen>
 
 </resources>
