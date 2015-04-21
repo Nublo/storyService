@@ -1,6 +1,7 @@
 package by.anatoldeveloper.stories;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -18,6 +19,7 @@ public class MainActivity extends BaseSpiceActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initToolBar();
+        getWindow().setBackgroundDrawable(null);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.container, new StoryFragment())
@@ -42,6 +44,17 @@ public class MainActivity extends BaseSpiceActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        RateAppHelper rateApp = new RateAppHelper(this);
+        if (!rateApp.hasDialogBeenShowed() && fragment instanceof StoryFragment) {
+            rateApp.increaseAppUsage();
+        } else {
+            super.onBackPressed();
+        }
     }
 
 }

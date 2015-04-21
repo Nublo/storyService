@@ -15,6 +15,8 @@ import java.util.List;
 import by.anatoldeveloper.stories.R;
 import by.anatoldeveloper.stories.adapter.StoryAdapter;
 import by.anatoldeveloper.stories.model.Story;
+import by.anatoldeveloper.stories.story.iterator.NextStory;
+import by.anatoldeveloper.stories.story.iterator.NextStoryFabric;
 
 /**
  * Created by Anatol on 25.02.2015.
@@ -60,14 +62,14 @@ public class FavoriteStoriesFragment extends BaseFragment {
             }
         });
         mFavoriteLabel = (TextView) rootView.findViewById(R.id.favorite);
-        refreshList();
+        initializeList();
         if (rootView.findViewById(R.id.story_container) != null) {
             isTwoPaneMode = true;
         }
         return rootView;
     }
 
-    private void refreshList() {
+    private void initializeList() {
         List<Story> favoriteStories = mRepository.findFavoriteStories();
         mAdapter = new StoryAdapter(getActivity(), favoriteStories);
         mStories.setAdapter(mAdapter);
@@ -122,13 +124,14 @@ public class FavoriteStoriesFragment extends BaseFragment {
         }
     }
 
-    public void refreshFavoriteStories(boolean isFavorite, int storyId) {
-        final int selectedItem = mAdapter.getSelectedItem();
-        refreshList();
+    public void updateFavoriteStoryList(boolean isFavorite, int storyId) {
         if (isFavorite) {
+            NextStory next = NextStoryFabric.storyById();
+            Story s = next.nextStory(mRepository, storyId);
+            mAdapter.addStoryWithUpdateUI(s);
             updateSelectedStoryItem(storyId);
         } else {
-            listScrollToPositionOnMainUIThread(mStories, selectedItem);
+            mAdapter.removeSelectedItem();
         }
     }
 

@@ -75,7 +75,7 @@ public class StoryFragment extends BaseStoryFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_undo && mCurrentStory > 1 && !isAnimating) {
-            NextStory next = NextStoryFabric.anyStory();
+            NextStory next = NextStoryFabric.storyById();
             mCurrentStory = mCurrentStory - 1;
             Story s = next.nextStory(mRepository, mCurrentStory);
             showPreviousStoryWithAnimation(s);
@@ -112,7 +112,7 @@ public class StoryFragment extends BaseStoryFragment {
     }
 
     private void showStoryWithMinId(int id, boolean withAnimation) {
-        NextStory next = NextStoryFabric.anyStory();
+        NextStory next = NextStoryFabric.storyById();
         Story s = next.nextStory(mRepository, id);
         if (s != null) {
             if (withAnimation) {

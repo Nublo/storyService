@@ -3,21 +3,27 @@
 
     <string name="app_name">Истории тяжёлый случай</string>
     <string name="app_title">Истории</string>
+
+    <string name="action_undo">Назад</string>
+    <string name="action_share">Поделиться</string>
     <string name="favorite_stories">Избранные</string>
-    <string name="undo">Отменить</string>
+
     <string name="next_story">ДАЛЕЕ</string>
-    <string name="like_story">like</string>
-    <string name="story_all">Все</string>
-    <string name="story_sex">18+</string>
-    <string name="story_public">18-</string>
-    <string name="dialog_title">Ошибка</string>
-    <string name="no_connection_error">Отсутствует интернет соединение. Попробовать ещё раз?</string>
-    <string name="server_error">Сервер не отвечает. Попробовать ещё раз?</string>
-    <string name="no_more_stories">На сервере отсуствуют новые истории. Попробуйте воспользоваться приложением позже</string>
     <string name="yes">ДА</string>
     <string name="no">НЕТ</string>
     <string name="ok">OK</string>
+
+    <string name="dialog_title">Ошибка</string>
+    <string name="no_connection_error">Отсутствует интернет соединение. Попробовать ещё раз?</string>
+    <string name="server_error">Сервер не отвечает. Попробовать ещё раз?</string>
+    <string name="no_more_stories">На сервере отсутствуют новые истории. Попробуйте воспользоваться приложением позже</string>
+
     <string name="favorite_empty">У вас ещё нет избранных историй</string>
     <string name="no_more_favorite_stories">У вас больше нет избранных историй</string>
+
+    <string name="rate_app_title">Оценить приложение</string>
+    <string name="rate_app_content">Если вам понравилось приложение, пожалуйста, оцените его</string>
+
+    <string name="divider_content_description">Разделитель</string>
 
 </resources>

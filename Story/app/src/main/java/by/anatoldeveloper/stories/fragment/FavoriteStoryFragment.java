@@ -2,6 +2,8 @@ package by.anatoldeveloper.stories.fragment;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.Button;
 
@@ -46,7 +48,13 @@ public class FavoriteStoryFragment extends BaseStoryFragment {
     @Override
     protected void setFavoriteClickListener(boolean favorite) {
         super.setFavoriteClickListener(favorite);
-        findFavoriteStoriesFragment().refreshFavoriteStories(favorite, mCurrentStory);
+        findFavoriteStoriesFragment().updateFavoriteStoryList(favorite, mCurrentStory);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_share, menu);
     }
 
     @Override

@@ -95,6 +95,29 @@ public class StoryAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void removeSelectedItem() {
+        if (mSelectedItem >= 0 && mSelectedItem < mStories.size()) {
+            mStories.remove(getSelectedItem());
+            mSelectedItem = -1;
+            notifyDataSetChanged();
+        }
+    }
+
+    public void addStoryWithUpdateUI(Story s) {
+        if (mStories == null)
+            return;
+        for(int i = 0; i < mStories.size(); i++) {
+            if (mStories.get(i).id > s.id) {
+                mStories.add(i, s);
+                setSelectedItem(i);
+                return;
+            }
+        }
+        mStories.add(s);
+        notifyDataSetChanged();
+        setSelectedItem(mStories.size() - 1);
+    }
+
     public int getSelectedItem() {
         return this.mSelectedItem;
     }

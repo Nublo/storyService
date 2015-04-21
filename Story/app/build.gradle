@@ -13,8 +13,8 @@ android {
         applicationId "by.anatoldeveloper.stories"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 11
-        versionName "1.0.1"
+        versionCode 13
+        versionName "1.0.2"
 
         resConfigs "ru"
         resConfigs "nodpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"

@@ -13,9 +13,11 @@ public class Account {
     private static final String STORY_READ = "stories";
     private static final String SEX_STORY_READ = "sex_stories";
     private static final String UNDO = "undo";
+    private static final String USAGES = "usages";
 
     public int mStories;
     public int mSexStories;
+    public int mUsages;
     public boolean mUndo;
 
     public void save(Context context) {
@@ -33,6 +35,23 @@ public class Account {
         mStories = prefs.getInt(STORY_READ, 0);
         mSexStories = prefs.getInt(SEX_STORY_READ, 0);
         mUndo = prefs.getBoolean(UNDO, true);
+    }
+
+    public void saveUsages(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("usage_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(USAGES, mUsages);
+        editor.apply();
+    }
+
+    public void restoreUsages(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences("usage_preferences", Context.MODE_PRIVATE);
+        mUsages = prefs.getInt(USAGES, mUsages);
+    }
+
+    @Override
+    public String toString() {
+        return String.format("[stories = %d, sexStories = %d, usages = %d,  undo = %b]", mStories, mSexStories, mUsages, mUndo);
     }
 
 }

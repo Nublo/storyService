@@ -1,5 +1,6 @@
 package by.anatoldeveloper.stories.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.method.ScrollingMovementMethod;
@@ -67,6 +68,19 @@ public abstract class BaseStoryFragment extends BaseFragment{
                 menuItem.setVisible(true);
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_share) {
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.app_name) + "\n\n" + mTvStoryText.getText());
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     protected void showNextStoryWithAnimation(Story s) {
