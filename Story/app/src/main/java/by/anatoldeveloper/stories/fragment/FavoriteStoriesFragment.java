@@ -37,7 +37,7 @@ public class FavoriteStoriesFragment extends BaseFragment {
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
+        if (savedInstanceState != null && mAdapter != null) {
             mAdapter.setSelectedItem(savedInstanceState.getInt(SELECTED_ITEM, -1));
         }
     }
@@ -45,7 +45,9 @@ public class FavoriteStoriesFragment extends BaseFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(SELECTED_ITEM, mAdapter.getSelectedItem());
+        if (mAdapter != null) {
+            outState.putInt(SELECTED_ITEM, mAdapter.getSelectedItem());
+        }
     }
 
     @Override
@@ -62,14 +64,14 @@ public class FavoriteStoriesFragment extends BaseFragment {
             }
         });
         mFavoriteLabel = (TextView) rootView.findViewById(R.id.favorite);
-        initializeList();
+        initList();
         if (rootView.findViewById(R.id.story_container) != null) {
             isTwoPaneMode = true;
         }
         return rootView;
     }
 
-    private void initializeList() {
+    private void initList() {
         List<Story> favoriteStories = mRepository.findFavoriteStories();
         mAdapter = new StoryAdapter(getActivity(), favoriteStories);
         mStories.setAdapter(mAdapter);
